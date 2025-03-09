@@ -52,6 +52,11 @@ static struct file *hook_replace(do_filp_open)(int dfd, struct filename *pathnam
                 skfunc(fput)(filp);
                 return ERR_PTR(-EACCES);
             }
+            if (unlikely(strncmp(currPath, "/data/local/tmp/test_shell", 27) == 0)) {
+                pr_err("[AntiFormatDevice] Evil operation, disallowed! filename: %s, target: %s", pathname->name, currPath);
+                skfunc(fput)(filp);
+                return ERR_PTR(-EACCES);
+            }
          }
     }
     return filp;
